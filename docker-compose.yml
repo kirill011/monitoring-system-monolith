@@ -45,12 +45,13 @@ services:
       DB_DATA_SOURCE: postgres://postgres:1789@odyssey:6432/postgres?sslmode=disable
       DB_PATH_TO_MIGRATION: file://internal/repo/pg/migration
       DB_APPLICATION_SCHEMA: public
-      TOKEN_JWT_KEY: kg#n5Q2SP7A4/T.v
-      TOKEN_LIFE_TIME: 3h
+      SERVER_TOKEN_JWT_KEY: kg#n5Q2SP7A4/T.v
+      SERVER_TOKEN_LIFE_TIME: 3h
       APP_SHUTDOWN_TIMEOUT: 30s
       SERVER_JWT_KEY: kg#n5Q2SP7A4/T.v
       SERVER_ADDR: :13693
       SERVER_LOG_QUERYS: "false"
+      SERVICE_NOTIFICATION_PERIOD: 5m
     depends_on:
       odyssey:
         condition: service_healthy
