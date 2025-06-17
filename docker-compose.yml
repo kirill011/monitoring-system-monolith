@@ -129,7 +129,7 @@ services:
     command:
       - "-config.file=/etc/promtail/promtail-config.yml"
     depends_on:
-      loki: 
+      loki-monolith: 
         condition: service_started
 
 volumes:
