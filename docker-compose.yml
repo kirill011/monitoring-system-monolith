@@ -20,7 +20,7 @@ services:
       timeout: 3s
       retries: 10
 
-  auth-service:
+  monolith-service:
     build:
       context: ./
       dockerfile: Dockerfile
@@ -54,7 +54,7 @@ services:
     depends_on:
       odyssey:
         condition: service_healthy
-      promtail: 
+      promtail-monolith: 
         condition: service_started
     labels:
       logging: "promtail"
@@ -102,7 +102,7 @@ services:
     depends_on:
       - postgres
 
-  loki:
+  loki-monolith:
     image: grafana/loki:latest
     container_name: loki
     ports:
@@ -114,15 +114,15 @@ services:
     environment:
       - LOKI_PORT=3100
     volumes:
-      - ./loki:/etc/loki
+      - ./loki-monolith:/etc/loki
 
-  promtail:
+  promtail-monolith:
     image: grafana/promtail:latest
     container_name: promtail
     ports:
       - "9080:9080"
     volumes:
-      - ./promtail:/etc/promtail
+      - ./promtail-monolith:/etc/promtail
       - /var/log:/var/promtail
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/containers:/var/lib/docker/containers
