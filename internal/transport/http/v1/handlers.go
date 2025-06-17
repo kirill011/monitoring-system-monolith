@@ -4,6 +4,7 @@ import (
 	"monolith/internal/services"
 	authHandlers "monolith/internal/transport/http/v1/auth"
 	devicesHandlers "monolith/internal/transport/http/v1/devices"
+	"monolith/internal/transport/http/v1/messages"
 	reportsHandlers "monolith/internal/transport/http/v1/reports"
 	tagsHandlers "monolith/internal/transport/http/v1/tags"
 	"time"
@@ -78,4 +79,11 @@ func (h *Handler) InitRouter(routeV1 fiber.Router) {
 		Messages:       h.reportsHandlers,
 		JWTKey:         h.jwtKey,
 	}).InitDevicesRoutes(routeV1)
+
+	messages.NewMessagesHandler(
+		&messages.Config{
+			Metrics:      h.metrics,
+			NatsHandlers: h.reportsHandlers,
+		},
+	).InitMessagesRoutes(routeV1)
 }

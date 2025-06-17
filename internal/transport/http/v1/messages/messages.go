@@ -23,7 +23,7 @@ type messagesHandler struct {
 
 type Config struct {
 	NatsHandlers services.Messages
-	metrics      prometheus.Counter
+	Metrics      prometheus.Counter
 }
 
 func NewMessagesHandler(cfg *Config) *messagesHandler {
@@ -37,7 +37,7 @@ func NewMessagesHandler(cfg *Config) *messagesHandler {
 	prometheus.MustRegister(ingressRequests)
 	return &messagesHandler{
 		natsHandlers: cfg.NatsHandlers,
-		metrics:      cfg.metrics,
+		metrics:      cfg.Metrics,
 		ingrMetrics:  ingressRequests,
 	}
 }
