@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v3"
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Handler struct {
@@ -21,8 +20,6 @@ type Handler struct {
 	tagsHandlers    services.Tags
 	reportsHandlers services.Messages
 	deviceChecker   services.DevicesHandler
-
-	metrics prometheus.Counter
 }
 
 type Config struct {
@@ -33,8 +30,6 @@ type Config struct {
 	TagsHandlers    services.Tags
 	ReportsHandlers services.Messages
 	DeviceChecker   services.DevicesHandler
-
-	Metrics prometheus.Counter
 }
 
 func NewHandler(cfg Config) *Handler {
@@ -82,7 +77,6 @@ func (h *Handler) InitRouter(routeV1 fiber.Router) {
 
 	messages.NewMessagesHandler(
 		&messages.Config{
-			Metrics:      h.metrics,
 			NatsHandlers: h.reportsHandlers,
 		},
 	).InitMessagesRoutes(routeV1)

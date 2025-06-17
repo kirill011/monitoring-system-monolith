@@ -12,7 +12,6 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
-	"github.com/prometheus/client_golang/prometheus"
 	"go.uber.org/zap"
 )
 
@@ -166,15 +165,6 @@ func (s *Server) setMiddleware(logQuerys bool) {
 func (s *Server) setHandlers() {
 	rootRoute := s.app.Group("/monolith")
 
-	egressResponses := prometheus.NewCounter(
-		prometheus.CounterOpts{
-			Name: "egress_responses_total",
-			Help: "Total async responses sent",
-		},
-	)
-
-	prometheus.MustRegister(egressResponses)
-
 	handlerV1 := v1.NewHandler(v1.Config{
 		JwtKey:          s.jwtKey,
 		AuthHandlers:    s.authHandlers,
@@ -182,7 +172,6 @@ func (s *Server) setHandlers() {
 		TagsHandlers:    s.tagsHandler,
 		ReportsHandlers: s.reportsHandler,
 		TokenLifeTime:   s.tokenLifeTime,
-		Metrics:         egressResponses,
 		DeviceChecker:   s.deviceChecker,
 	})
 	{

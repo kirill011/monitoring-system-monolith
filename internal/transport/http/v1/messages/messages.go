@@ -17,13 +17,12 @@ const (
 
 type messagesHandler struct {
 	natsHandlers services.Messages
-	metrics      prometheus.Counter
+	egrMetrics   prometheus.Counter
 	ingrMetrics  prometheus.Counter
 }
 
 type Config struct {
 	NatsHandlers services.Messages
-	Metrics      prometheus.Counter
 }
 
 func NewMessagesHandler(cfg *Config) *messagesHandler {
@@ -34,10 +33,19 @@ func NewMessagesHandler(cfg *Config) *messagesHandler {
 		},
 	)
 
+	egressResponses := prometheus.NewCounter(
+		prometheus.CounterOpts{
+			Name: "egress_responses_total",
+			Help: "Total async responses sent",
+		},
+	)
+
+	prometheus.MustRegister(egressResponses)
+
 	prometheus.MustRegister(ingressRequests)
 	return &messagesHandler{
 		natsHandlers: cfg.NatsHandlers,
-		metrics:      cfg.Metrics,
+		egrMetrics:   egressResponses,
 		ingrMetrics:  ingressRequests,
 	}
 }
@@ -101,7 +109,7 @@ func (h *messagesHandler) sendMsg(ctx fiber.Ctx) error {
 			fmt.Errorf("ctx.Send: %w", err).Error(),
 		)
 	}
-	h.metrics.Inc()
+	h.egrMetrics.Inc()
 
 	return nil
 }
