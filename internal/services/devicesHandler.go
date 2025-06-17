@@ -18,9 +18,12 @@ type DeviceHandler struct {
 }
 
 func NewDeviceHandler(devices repo.Devices) *DeviceHandler {
-	return &DeviceHandler{
+	deviceHandler := DeviceHandler{
 		repo: devices,
 	}
+
+	deviceHandler.UpdateDevices()
+	return &deviceHandler
 }
 
 var (
