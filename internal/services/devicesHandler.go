@@ -11,8 +11,8 @@ type DeviceHandler struct {
 	repo repo.Devices
 }
 
-func NewDeviceHandler(devices repo.Devices) DeviceHandler {
-	return DeviceHandler{
+func NewDeviceHandler(devices repo.Devices) *DeviceHandler {
+	return &DeviceHandler{
 		repo: devices,
 	}
 }

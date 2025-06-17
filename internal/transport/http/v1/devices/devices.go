@@ -22,7 +22,7 @@ const (
 type devicesHandler struct {
 	devicesService services.Devices
 	messages       services.Messages
-	deviceChecker  services.DeviceHandler
+	deviceChecker  *services.DeviceHandler
 	jwtKey         string
 }
 
@@ -30,7 +30,7 @@ type Config struct {
 	JWTKey         string
 	DevicesService services.Devices
 	Messages       services.Messages
-	DeviceChecker  services.DeviceHandler
+	DeviceChecker  *services.DeviceHandler
 }
 
 func NewDevicesHandler(cfg *Config) *devicesHandler {

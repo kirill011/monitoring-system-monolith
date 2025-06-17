@@ -26,7 +26,7 @@ type Server struct {
 	devicesHandlers services.Devices
 	tagsHandler     services.Tags
 	reportsHandler  services.Messages
-	deviceChecker   services.DeviceHandler
+	deviceChecker   *services.DeviceHandler
 }
 
 type Config struct {
@@ -39,7 +39,7 @@ type Config struct {
 	DevicesHandlers services.Devices
 	TagsHandler     services.Tags
 	ReportsHandler  services.Messages
-	DeviceChecker   services.DeviceHandler
+	DeviceChecker   *services.DeviceHandler
 }
 
 func NewServer(cfg Config) *Server {
