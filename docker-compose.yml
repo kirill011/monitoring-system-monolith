@@ -33,7 +33,6 @@ services:
     expose:
       - 13693
       - 9081
-      - 9082
     volumes:
       - .:/app/monolith-service
     networks:
