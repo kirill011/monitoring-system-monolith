@@ -82,6 +82,7 @@ services:
     volumes:
       - postgres-monolith-db:/var/lib/postgresql/data
       - ./postgres-config/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+      - ./postgres-config/postgresql.conf:/var/lib/postgresql/data/monolith/postgresql.conf
     networks:
       - nats
 
