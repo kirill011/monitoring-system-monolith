@@ -143,6 +143,15 @@ services:
     depends_on:
       loki-monolith: 
         condition: service_started
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - 8080:8080
 
 volumes:
   postgres-monolith-db:
