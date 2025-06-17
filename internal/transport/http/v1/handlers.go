@@ -39,6 +39,7 @@ type Config struct {
 func NewHandler(cfg Config) *Handler {
 	return &Handler{
 		jwtKey:          cfg.JwtKey,
+		tokenLifeTime:   cfg.TokenLifeTime,
 		authService:     cfg.AuthHandlers,
 		devicesService:  cfg.DevicesHandlers,
 		tagsHandlers:    cfg.TagsHandlers,
