@@ -19,7 +19,7 @@ type Handler struct {
 	devicesService  services.Devices
 	tagsHandlers    services.Tags
 	reportsHandlers services.Messages
-	deviceChecker   *services.DeviceHandler
+	deviceChecker   services.DevicesHandler
 
 	metrics prometheus.Counter
 }
@@ -31,7 +31,7 @@ type Config struct {
 	DevicesHandlers services.Devices
 	TagsHandlers    services.Tags
 	ReportsHandlers services.Messages
-	DeviceChecker   *services.DeviceHandler
+	DeviceChecker   services.DevicesHandler
 
 	Metrics prometheus.Counter
 }

@@ -7,6 +7,12 @@ import (
 	"sync"
 )
 
+type DevicesHandler interface {
+	UpdateDevices()
+	GetDeviceIDByIp(address string) (int32, bool)
+	GetDevicesIPs() []string
+}
+
 type DeviceHandler struct {
 	repo repo.Devices
 }
