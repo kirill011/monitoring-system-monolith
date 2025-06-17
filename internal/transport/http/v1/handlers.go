@@ -77,7 +77,8 @@ func (h *Handler) InitRouter(routeV1 fiber.Router) {
 
 	messages.NewMessagesHandler(
 		&messages.Config{
-			NatsHandlers: h.reportsHandlers,
+			NatsHandlers:  h.reportsHandlers,
+			DeviceHandler: h.deviceChecker,
 		},
 	).InitMessagesRoutes(routeV1)
 }

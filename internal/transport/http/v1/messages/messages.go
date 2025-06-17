@@ -16,13 +16,15 @@ const (
 )
 
 type messagesHandler struct {
-	natsHandlers services.Messages
-	egrMetrics   prometheus.Counter
-	ingrMetrics  prometheus.Counter
+	natsHandlers  services.Messages
+	deviceHandler services.DevicesHandler
+	egrMetrics    prometheus.Counter
+	ingrMetrics   prometheus.Counter
 }
 
 type Config struct {
-	NatsHandlers services.Messages
+	NatsHandlers  services.Messages
+	DeviceHandler services.DevicesHandler
 }
 
 func NewMessagesHandler(cfg *Config) *messagesHandler {
@@ -44,9 +46,10 @@ func NewMessagesHandler(cfg *Config) *messagesHandler {
 
 	prometheus.MustRegister(ingressRequests)
 	return &messagesHandler{
-		natsHandlers: cfg.NatsHandlers,
-		egrMetrics:   egressResponses,
-		ingrMetrics:  ingressRequests,
+		natsHandlers:  cfg.NatsHandlers,
+		deviceHandler: cfg.DeviceHandler,
+		egrMetrics:    egressResponses,
+		ingrMetrics:   ingressRequests,
 	}
 }
 
@@ -80,11 +83,12 @@ func (h *messagesHandler) sendMsg(ctx fiber.Ctx) error {
 		)
 	}
 
+	id, _ := h.deviceHandler.GetDeviceIDByIp(body.Address)
 	_, _, err := h.natsHandlers.Create(models.Message{
 		Message:     body.Message,
 		MessageType: body.MessageType,
 		Component:   body.Component,
-		DeviceIP:    body.Address,
+		DeviceId:    id,
 	})
 	if err != nil {
 		return fiber.NewError(
