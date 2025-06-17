@@ -1,0 +1,23 @@
+server:
+  http_listen_address: 0.0.0.0
+  http_listen_port: 9080
+
+positions:
+  filename: "/var/promtail/positions.yaml" # remove "_${HOST_HOSTNAME}" if you do not use docker swarm
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # Сбор логов с Docker контейнеров
+  - job_name: docker-logs
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        filters:
+          - name: label
+            values: ["logging=promtail"]
+    relabel_configs:
+      - source_labels: [__meta_docker_container_name]
+        target_label: container
+      - source_labels: [__meta_docker_container_log_stream]
+        target_label: stream
