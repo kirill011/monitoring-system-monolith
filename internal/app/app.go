@@ -66,6 +66,7 @@ func Run(ctx context.Context, cfg *config.Config, stop context.CancelFunc) {
 		JwtKey:          cfg.Server.JwtKey,
 		Addr:            cfg.Server.Addr,
 		LogQuerys:       cfg.Server.LogQuerys,
+		TokenLifeTime:   cfg.Server.TokenLifeTime,
 		AuthHandlers:    authService,
 		DevicesHandlers: devicesService,
 		TagsHandler:     tagsService,
