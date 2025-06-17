@@ -80,7 +80,7 @@ services:
     ports:
       - 5434:5434
     volumes:
-      - postgres-monolith-db:/var/lib/postgresql/data/monolith
+      - postgres-monolith-db:/var/lib/postgresql/data
       - ./postgres-config/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     networks:
       - nats
