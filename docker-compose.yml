@@ -79,7 +79,7 @@ services:
     ports:
       - 5434:5434
     volumes:
-      - postgres-db:/var/lib/postgresql/data
+      - postgres-monolith-db:/var/lib/postgresql/data
       - ./postgres-config/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
     networks:
       - nats
@@ -114,7 +114,7 @@ services:
     environment:
       - LOKI_PORT=3100
     volumes:
-      - ./loki-monolith:/etc/loki
+      - ./loki:/etc/loki
 
   promtail-monolith:
     image: grafana/promtail:latest
@@ -122,7 +122,7 @@ services:
     ports:
       - "9080:9080"
     volumes:
-      - ./promtail-monolith:/etc/promtail
+      - ./promtail:/etc/promtail
       - /var/log:/var/promtail
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/containers:/var/lib/docker/containers
@@ -133,7 +133,7 @@ services:
         condition: service_started
 
 volumes:
-  postgres-db:
+  postgres-monolith-db:
 
 networks:
   nats:
