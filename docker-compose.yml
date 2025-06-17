@@ -19,6 +19,13 @@ services:
       interval: 3s
       timeout: 3s
       retries: 10
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    sysctls:
+      - net.ipv4.ip_local_port_range=1024 65535
+      - net.ipv4.tcp_tw_reuse=1
 
   monolith-service:
     build:
@@ -58,6 +65,9 @@ services:
         condition: service_started
     labels:
       logging: "promtail"
+    sysctls:
+      - net.ipv4.ip_local_port_range=1024 65535
+      - net.ipv4.tcp_tw_reuse=1
 
   postgres:
     image: postgres
