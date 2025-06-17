@@ -104,7 +104,7 @@ services:
 
   loki-monolith:
     image: grafana/loki:latest
-    container_name: loki
+    container_name: loki-monolith
     ports:
       - "3100:3100"
       - "9093:9093"
@@ -118,7 +118,7 @@ services:
 
   promtail-monolith:
     image: grafana/promtail:latest
-    container_name: promtail
+    container_name: promtail-monolith
     ports:
       - "9080:9080"
     volumes:
