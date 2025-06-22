@@ -95,7 +95,10 @@ services:
       - ./postgres-config/postgresql.conf:/var/lib/postgresql/data/monolith/postgresql.conf
     networks:
       - nats
-
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
 
   postgres-exporter:
     command: '--no-collector.stat_bgwriter'
