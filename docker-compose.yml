@@ -44,6 +44,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`77.222.60.80`)"
       - "traefik.http.routers.traefik.service=api@internal"
+    depends_on:
+      - monolith-service
   monolith-service:
     build:
       context: ./
