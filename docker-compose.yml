@@ -27,18 +27,66 @@ services:
       - net.ipv4.ip_local_port_range=1024 65535
       - net.ipv4.tcp_tw_reuse=1
 
-  monolith-service:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "13693:13693"
+    expose:
+      - 13693
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+  monolith-service-1:
     build:
       context: ./
       dockerfile: Dockerfile
     stop_signal: SIGINT
     stop_grace_period: 10s
     ports:
-      - 13693:13693
+      - 13694:13693
       - 9081:9081
       - 9082:9082
     expose:
-      - 13693
+      - 9081
+    volumes:
+      - .:/app/monolith-service
+    networks:
+      - nats-m
+    environment:
+      LOG_LEVEL: info
+      LOG_SERVICE_NAME: monolith-service
+      LOG_PATH: /var/log/monolith-service
+      DB_DATA_SOURCE: postgres://postgres:1789@odyssey:6432/postgres?sslmode=disable
+      DB_PATH_TO_MIGRATION: file://internal/repo/pg/migration
+      DB_APPLICATION_SCHEMA: public
+      SERVER_TOKEN_JWT_KEY: kg#n5Q2SP7A4/T.v
+      SERVER_TOKEN_LIFE_TIME: 3h
+      APP_SHUTDOWN_TIMEOUT: 30s
+      SERVER_JWT_KEY: kg#n5Q2SP7A4/T.v
+      SERVER_ADDR: :13693
+      SERVER_LOG_QUERYS: "false"
+      SERVICE_NOTIFICATION_PERIOD: 5m
+    depends_on:
+      odyssey:
+        condition: service_healthy
+      promtail-monolith: 
+        condition: service_started
+    labels:
+      logging: "promtail"
+    sysctls:
+      - net.ipv4.ip_local_port_range=1024 65535
+      - net.ipv4.tcp_tw_reuse=1
+
+  monolith-service-2:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    stop_signal: SIGINT
+    stop_grace_period: 10s
+    ports:
+      - 13695:13693
+      - 9081:9081
+      - 9082:9082
+    expose:
       - 9081
     volumes:
       - .:/app/monolith-service
