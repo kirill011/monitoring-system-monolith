@@ -84,10 +84,6 @@ services:
     stop_grace_period: 10s
     ports:
       - 13695:13693
-      - 9081:9081
-      - 9082:9082
-    expose:
-      - 9081
     volumes:
       - .:/app/monolith-service
     networks:
