@@ -27,19 +27,23 @@ services:
       - net.ipv4.ip_local_port_range=1024 65535
       - net.ipv4.tcp_tw_reuse=1
 
-  nginx:
-    image: nginx:latest
+  traefik:
+    image: traefik:v2.10
+    command:
+      - --api.insecure=true
+      - --providers.docker=true
+      - --entrypoints.web.address=:13693
     ports:
       - "13693:13693"
-    expose:
-      - 13693
+      - "8080:8080"  # Панель управления Traefik
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - nats-m
-    depends_on:
-      - monolith-service-1
-      - monolith-service-2
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`77.222.60.80`)"
+      - "traefik.http.routers.traefik.service=api@internal"
   monolith-service-1:
     build:
       context: ./
@@ -76,7 +80,10 @@ services:
       promtail-monolith: 
         condition: service_started
     labels:
-      logging: "promtail"
+      - "traefik.enable=true"
+      - "traefik.http.routers.monolith.rule=Host(`77.222.60.80`)"
+      - "traefik.http.routers.monolith.service=monolith@docker"
+      - "traefik.http.services.monolith.loadbalancer.server.port=13693"
     sysctls:
       - net.ipv4.ip_local_port_range=1024 65535
       - net.ipv4.tcp_tw_reuse=1
@@ -113,7 +120,10 @@ services:
       promtail-monolith: 
         condition: service_started
     labels:
-      logging: "promtail"
+      - "traefik.enable=true"
+      - "traefik.http.routers.monolith.rule=Host(`77.222.60.80`)"
+      - "traefik.http.routers.monolith.service=monolith@docker"
+      - "traefik.http.services.monolith.loadbalancer.server.port=13693"
     sysctls:
       - net.ipv4.ip_local_port_range=1024 65535
       - net.ipv4.tcp_tw_reuse=1
