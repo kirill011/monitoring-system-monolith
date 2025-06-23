@@ -35,7 +35,7 @@ services:
       - --entrypoints.web.address=:13693
     ports:
       - "13693:13693"
-      - "8080:8080"  # Панель управления Traefik
+      - "13600:13600"  # Панель управления Traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
