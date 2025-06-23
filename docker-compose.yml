@@ -35,6 +35,8 @@ services:
       - 13693
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - nats-m
     depends_on:
       - monolith-service-1
       - monolith-service-2
